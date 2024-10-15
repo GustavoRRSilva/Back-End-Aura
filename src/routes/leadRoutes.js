@@ -1,6 +1,6 @@
 import express from 'express';
 
-import LeadController from '../controllers/leadController.js;
+import LeadController from '../controllers/leadController.js';
 
 const router = express.Router();
 const leadController = new LeadController();
