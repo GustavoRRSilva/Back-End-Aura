@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const leadSchema = new mongoose.Schema({
-    numero: {
+    number: {
         type: String,
         required: true,
     },
@@ -9,10 +9,14 @@ const leadSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    nome: {
+    name: {
         type: String,
         required: true,
     },
+    subject:{
+        type: String,
+        required: true,
+    }
 });
 
 mongoose.model('Lead', leadSchema);

@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
-import '../models/leadModel.js'; // Supondo que seu modelo Lead está definido aqui
+import '../models/leadModel.js'; 
+import { MongoClient } from 'mongodb';
 
 class LeadController {
     constructor() {
@@ -15,13 +16,13 @@ class LeadController {
         if (mongoose.connection.readyState === 1) { // Verificar se já está conectado
             try {
                 // Validação simples
-                const { numero, email, nome } = req.body;
-                if (!numero || !email || !nome) {
+                const { number, email, name, subject } = req.body;
+                if (!number || !email || !name || !subject) {
                     return res.status(400).send("Todos os campos são obrigatórios.");
                 }
 
                 // Cria uma nova instância de Lead
-                const lead = new this.Lead({ numero, email, nome });
+                const lead = new this.Lead({ number, email, name, subject });
 
                 // Salva o lead no banco de dados
                 await lead.save();
@@ -40,6 +41,17 @@ class LeadController {
             }, delay);
         } else {
             res.status(500).send("Não foi possível conectar ao banco de dados após várias tentativas.");
+        }
+    }
+
+    async fetchLeads(req, res) {
+        try {
+            const leads = await this.Lead.find({}); // Busca todos os leads
+            console.log(leads);
+            res.status(200).json(leads); // Retorna os leads no formato JSON
+        } catch (error) {
+            console.error('Erro ao buscar leads:', error);
+            res.status(500).send('Erro ao buscar leads');
         }
     }
 }

@@ -17,7 +17,7 @@ app.use('/', leadRoutes);
 (async () => {
     try {
         if (mongoose.connection.readyState === 0) { // Verificar se já está conectado
-            const mongoURI = "mongodb+srv://gstvrrds:<db_password>@aura.bbtfe.mongodb.net/?retryWrites=true&w=majority&appName=Aura";
+            const mongoURI = "mongodb+srv://gstvrrdsD:gstvrrds@aura.bbtfe.mongodb.net/?retryWrites=true&w=majority&appName=Aura";
 
             mongoose.Promise = global.Promise;
             mongoose.connect(mongoURI).then(() => {
