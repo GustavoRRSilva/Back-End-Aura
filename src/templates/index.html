@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Backend Aura</title>
+</head>
+    <body align="center">
+        <h1>Bem-vindo a Aura!</h1>
+        <form method="post" action="/leads" id="lead-form" name="lead-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="seuemail@gmail.com" required><br>
+
+            <label for="nome">Nome:</label>
+            <input id="nome" name="nome" placeholder="Seu nome completo aqui." required><br>
+
+            <label for="numero">Número:</label>
+            <input id="numero" name="numero" placeholder="+00000000000000" required><br><br>
+            
+            <button type="submit">Enviar</button>
+        </form>
+    </body>
+    <script type="text/JavaScript">
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById("lead-form").addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                // Obtendo os valores dos campos
+                const numero = document.getElementById("numero").value;
+                const email = document.getElementById("email").value;
+                const nome = document.getElementById("nome").value;
+
+                // Verificando se todos os campos necessários estão presentes
+                if (!numero || !email || !nome) {
+                    alert("Todos os campos são obrigatórios.");
+                    return;
+                }
+
+                // Validação de email
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    alert("Email inválido. Corrija, por favor.");
+                    return;
+                }
+
+                // Regex para validar nomes, permitindo letras e alguns caracteres especiais
+                const nomeRegex = /^[A-Za-zÀ-ÿ\s()+-]+$/;
+                if (!nomeRegex.test(nome) || nome.length < 2 || nome.length > 50) {
+                    alert("Nome inválido. Utilize apenas letras e espaços entre 2 a 50 caracteres.");
+                    return;
+                }
+
+                // Regex para validar números
+                const numeroRegex = /^[+\-()\s]*\d+([\s+\-()]*\d+)*$/;  
+                if (numero.length < 10 || numero.length > 15) {
+                    alert("Número inválido. Deve ter entre 10 e 15 caracteres.");
+                    return;
+                } else if (!numeroRegex.test(numero)) {
+                    alert("Número inválido. Corrija, por favor.");
+                    return;
+                }
+
+                // Se tudo estiver correto, enviar os dados ao backend
+                const leadData = {
+                    nome,
+                    email,
+                    numero
+                };
+
+                try {
+                    alert("Enviando informações.")
+                    const response = await fetch('/leads', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(leadData)
+                    });
+
+                    if (response.ok) {
+                        console.log("Dados enviados com sucesso!");
+                        alert("Lead salvo com sucesso!");
+                        document.getElementById("lead-form").reset(); // Limpa o formulário após o envio
+                    } else {
+                        console.log("Erro ao enviar os dados.");
+                        alert("Ocorreu um erro ao salvar o lead.");
+                    }
+                } catch (error) {
+                    console.error("Erro:", error);
+                    alert("Erro de rede ao tentar enviar os dados.");
+                }
+            });
+        });
+    </script>
+  </html>
+  
