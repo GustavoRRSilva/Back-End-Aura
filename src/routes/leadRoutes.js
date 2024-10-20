@@ -13,4 +13,8 @@ router.get('/', (req, res) => {
     res.sendfile('src/templates/index.html');
 });
 
+router.get("/leads",(req,res)=>{
+    leadController.fetchLeads(req,res);
+})
+
 export default router;
