@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import '../models/leadModel.js'; 
+import validator from 'validator';
 import { MongoClient } from 'mongodb';
-
 class LeadController {
     constructor() {
         // Definindo o modelo Lead como uma propriedade da classe
@@ -19,6 +19,33 @@ class LeadController {
                 const { number, email, name, subject } = req.body;
                 if (!number || !email || !name || !subject) {
                     return res.status(400).send("Todos os campos são obrigatórios.");
+                }
+
+                // Validator para checagem de email
+                if (!validator.isEmail(email)) {
+                    return res.status(400).send("Email inválido. Corrija, por favor.");
+                }
+
+                // Regex para validar nomes, permitindo letras e alguns caracteres especiais
+                const nomeRegex = /^[A-Za-zÀ-ÿ\s()+-]+$/;
+                if (!nomeRegex.test(nome) || nome.length < 2 || nome.length > 50) {
+                    return res.status(400).send("Nome inválido. Utilize apenas letras e espaços entre 2 a 50 caracteres.");
+                }
+
+                // Regex para validar números
+                const numeroRegex = /^[+\-()\s]*\d+([\s+\-()]*\d+)*$/;  
+                // Número com tamanho entre 10 e 15 caracteres
+                if (numero.length < 10 || numero.length > 15) {
+                    return res.status(400).send("Número inválido. Deve ter entre 10 e 15 caracteres.");
+                } else if (!numeroRegex.test(numero)) {
+                    return res.status(400).send("Número inválido. Deve ter apenas dígitos ou caracteres especiais.");
+                }
+
+                const subjectRegex = /^[a-zA-Z0-9\s,?]+$/;
+                if (subject.length < 100 || subject.length > 255) {
+                    return res.status(400).send("Interesse inválido. Deve ter entre 100 e 255 caracteres.");
+                } else if (!subjectRegex.test(subject)) {
+                    return res.status(400).send("Interesse inválido. Deve ter apenas letras, números e vírgulas.");
                 }
 
                 // Cria uma nova instância de Lead

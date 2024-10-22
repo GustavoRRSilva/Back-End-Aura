@@ -2,8 +2,11 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose';
-
+import dotenv from 'dotenv';
 import leadRoutes from './routes/leadRoutes.js';
+
+dotenv.config();
+const MONGO_URI = process.env.MONGO_URI;
 
 const app = express();
 app.use(cors());
@@ -17,10 +20,8 @@ app.use('/', leadRoutes);
 (async () => {
     try {
         if (mongoose.connection.readyState === 0) { // Verificar se já está conectado
-            const mongoURI = "mongodb+srv://gstvrrdsD:gstvrrds@aura.bbtfe.mongodb.net/?retryWrites=true&w=majority&appName=Aura";
-
             mongoose.Promise = global.Promise;
-            mongoose.connect(mongoURI).then(() => {
+            mongoose.connect(MONGO_URI).then(() => {
                 console.log('Conexão com MongoDB estabelecida.');
             }).catch((error) => {
                 console.error('Conexão com MongoDB não estabelecida:', error);
