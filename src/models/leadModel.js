@@ -13,10 +13,12 @@ const leadSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    subject:{
+    subject: {
         type: String,
         required: true,
-    }
+    },
+}, {
+    timestamps: { createdAt: true, updatedAt: false }
 });
 
 mongoose.model('Lead', leadSchema);

@@ -11,11 +11,17 @@
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" placeholder="seuemail@gmail.com" required><br>
 
-            <label for="nome">Nome:</label>
-            <input id="nome" name="nome" placeholder="Seu nome completo aqui." required><br>
+            <label for="name">Nome:</label>
+            <input id="name" name="name" placeholder="Seu nome completo aqui." required><br>
 
-            <label for="numero">Número:</label>
-            <input id="numero" name="numero" placeholder="+00000000000000" required><br><br>
+            <label for="number">Número:</label>
+            <input id="number" name="number" placeholder="+00000000000000" required><br><br>
+
+            <label for="subject">Interesse:</label>
+            <textarea id="subject" name="subject" required>
+Aqui você pode descrever um pouco quais serviços tem interesse em contratar,
+pode tirar dúvidas e faremos um possível contato.
+            </textarea><br><br>
             
             <button type="submit">Enviar</button>
         </form>
@@ -26,12 +32,13 @@
                 e.preventDefault();
 
                 // Obtendo os valores dos campos
-                const numero = document.getElementById("numero").value;
+                const number = document.getElementById("number").value;
                 const email = document.getElementById("email").value;
-                const nome = document.getElementById("nome").value;
+                const name = document.getElementById("name").value;
+                const subject = document.getElementById("subject").value;
 
                 // Verificando se todos os campos necessários estão presentes
-                if (!numero || !email || !nome) {
+                if (!number || !email || !name || !subject) {
                     alert("Todos os campos são obrigatórios.");
                     return;
                 }
@@ -43,28 +50,37 @@
                     return;
                 }
 
-                // Regex para validar nomes, permitindo letras e alguns caracteres especiais
-                const nomeRegex = /^[A-Za-zÀ-ÿ\s()+-]+$/;
-                if (!nomeRegex.test(nome) || nome.length < 2 || nome.length > 50) {
+                // Regex para validar names, permitindo letras e alguns caracteres especiais
+                const nameRegex = /^[A-Za-zÀ-ÿ\s()+-]+$/;
+                if (!nameRegex.test(name) || name.length < 2 || name.length > 50) {
                     alert("Nome inválido. Utilize apenas letras e espaços entre 2 a 50 caracteres.");
                     return;
                 }
 
                 // Regex para validar números
-                const numeroRegex = /^[+\-()\s]*\d+([\s+\-()]*\d+)*$/;  
-                if (numero.length < 10 || numero.length > 15) {
+                const numberRegex = /^[+\-()\s]*\d+([\s+\-()]*\d+)*$/;  
+                if (number.length < 10 || number.length > 15) {
                     alert("Número inválido. Deve ter entre 10 e 15 caracteres.");
                     return;
-                } else if (!numeroRegex.test(numero)) {
+                } else if (!numberRegex.test(number)) {
                     alert("Número inválido. Corrija, por favor.");
+                    return;
+                }
+                const subjectRegex = /^[a-zA-Z0-9\s,]+$/;
+                if (subject.length < 100 || subject.length > 255) {
+                    alert("Interesse inválido. Deve ter entre 100 e 255 caracteres.");
+                    return;
+                } else if (!subjectRegex.test(subject)) {
+                    alert("Interesse inválido. Deve ter apenas letras e vírgulas.");
                     return;
                 }
 
                 // Se tudo estiver correto, enviar os dados ao backend
                 const leadData = {
-                    nome,
+                    name,
                     email,
-                    numero
+                    number,
+                    subject
                 };
 
                 try {
