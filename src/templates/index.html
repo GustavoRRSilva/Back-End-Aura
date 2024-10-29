@@ -67,13 +67,7 @@ pode tirar dúvidas e faremos um possível contato.
                     return;
                 }
                 const subjectRegex = /^[a-zA-Z0-9\s,]+$/;
-                if (subject.length < 100 || subject.length > 255) {
-                    alert("Interesse inválido. Deve ter entre 100 e 255 caracteres.");
-                    return;
-                } else if (!subjectRegex.test(subject)) {
-                    alert("Interesse inválido. Deve ter apenas letras e vírgulas.");
-                    return;
-                }
+               
 
                 // Se tudo estiver correto, enviar os dados ao backend
                 const leadData = {
