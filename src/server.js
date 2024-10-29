@@ -16,16 +16,22 @@ app.use(bodyParser.json());
 // Usando as rotas definidas
 app.use("/", leadRoutes);
 
-(async () => {
+const startServer = async () => {
   try {
-    if (mongoose.connection.readyState === 0) {
-      mongoose.Promise = global.Promise;
-      await mongoose.connect(MONGO_URI);
-      console.log("Conexão com MongoDB estabelecida.");
-    }
+    await mongoose.connect(MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Conexão com MongoDB estabelecida.");
+
+    // Escuta na porta padrão da Vercel
+    app.listen(process.env.PORT || 3000, () => {
+      console.log("Servidor rodando...");
+    });
   } catch (error) {
     console.error("Erro ao conectar com o MongoDB:", error);
+    process.exit(1); // Encerra o processo se a conexão falhar
   }
-})();
+};
 
-export default app; // Exporta o app em vez de ouvir diretamente uma porta
+startServer();
